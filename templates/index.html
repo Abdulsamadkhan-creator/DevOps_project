@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>DevOps Dashboard</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+        }
+
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 20px 40px;
+        }
+
+        .container {
+            padding: 40px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            min-width: 200px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .failed {
+            color: red;
+            font-weight: bold;
+        }
+
+        .project {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        .deployment {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>🚀 DevOps Dashboard</h1>
+
+    <p>
+        Application Deployment & Monitoring Platform
+    </p>
+
+</header>
+
+
+<div class="container">
+
+    <h2>Overview</h2>
+
+    
+
+    <div class="cards">
+
+    <div class="card">
+
+        <h3>Total Projects</h3>
+
+        <p>
+            {{ total_projects }}
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>Total Deployments</h3>
+
+        <p>
+            {{ total_deployments }}
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>Successful Deployments</h3>
+
+        <p class="status">
+            {{ successful_deployments }}
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>Failed Deployments</h3>
+
+        <p>
+            {{ failed_deployments }}
+        </p>
+
+    </div>
+
+</div>
+
+    
+
+    <h2>Create Project</h2>
+
+<form action="/create_project"  method="POST">
+
+    <label>Project Name:</label>
+    <input type="text" name="name" required>
+
+    <br><br>
+
+    <label>Environment:</label>
+    <select name="environment">
+        <option value="Development">Development</option>
+        <option value="Testing">Testing</option>
+        <option value="Production">Production</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Create Project</button>
+
+</form>
+
+
+    <h2>Projects</h2>
+    
+    {% for project in projects %}
+
+    <div class="project">
+
+        <h3>
+            {{ project.name }}
+        </h3>
+
+        <p>
+            Environment: {{ project.environment }}
+        </p>
+
+        <p>
+            Status:
+             Status:
+                {% if project.status == "Deployed" %}
+
+                   <span class="success">
+                      ●  {{ project.status }}
+                   </span>
+                {% elif project.status == "Deployment Failed"%}
+                   <span class = "failed">
+                      ● {{ project.status }}
+
+                   </span>
+                {% else %}
+                   <span class="status">
+                      ● {{project.status}}
+                   </span>
+                {% endif %}
+           
+        </p>
+
+        <form action="/deploy" method="POST">
+
+            <input
+                type="hidden"
+                name="project_name"
+                value="{{ project.name }}"
+            >
+
+            <input
+                type="hidden"
+                name="environment"
+                value="{{ project.environment }}"
+            >
+
+            <label>Version:</label>
+
+            <input
+                type="text"
+                name="version"
+                value="v1.0.0"
+                required
+            >
+            <br><br>
+
+            <label>Status:</label>
+            <select name = "status">
+                <option value="Successful">Successful</option>
+                <option value="Failed">Failed</option>
+            </select>
+
+            <br><br>
+
+            <button type="submit">
+                Deploy
+            </button>
+
+        </form>
+
+    </div>
+
+{% endfor %}
+    
+    
+    <h2>Recent Deployments</h2>
+
+    {% for deployment in deployments %}
+
+        <div class="deployment">
+
+            <h3>
+                {{ deployment.version }}
+            </h3>
+
+            <p>
+                Environment:
+                {{ deployment.environment }}
+            </p>
+
+            <p>
+                Status:
+                {% if deployment.status == "Successful" %}
+
+                   <span class="success">
+                      ●  {{ deployment.status }}
+                   </span>
+                {%elif deployment.status == "Failed" %}
+                   <span class = "failed">
+                      ● {{ deployment.status }}
+
+                    </span>
+                {% else %}
+                   <span class="status">
+                       ● {{deployment.status}}
+                   </span>
+                {% endif %}
+            </p>
+            <p>
+                Deployed At :
+                   {{deployment.deployed_at }}
+            </p>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+
+</html>
+
+
