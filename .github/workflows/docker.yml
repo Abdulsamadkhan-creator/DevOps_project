@@ -13,5 +13,16 @@ jobs:
    - name : checkout code
      uses : actions/checkout@v4
 
+   - name : login to docker hub
+     uses : docker/login-actions@v3
+     with : 
+        username : ${{ secrets.DOCKERHUB_USERNAME }}
+        password : ${{secrets.DOCKERHUB_PASSWORD}}
+
+
    - name : build docker image
-     run  : docker build -t docker-dashboard . 
+     run  : docker build -t abdulsamadkhan2/docker-dashboard:latest .
+
+
+   - name : Push docker image
+     run :  docker push abdulsamadkhan2/docker_dashboard:latest
