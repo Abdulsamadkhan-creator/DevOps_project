@@ -20,9 +20,9 @@ jobs:
         password : ${{secrets.DOCKERHUB_PASSWORD}}
 
 
-   - name : build docker image
+   - name : Build Docker image
      run  : docker build -t abdulsamadkhan2/docker-dashboard:latest .
 
 
-   - name : Push docker image
+   - name : Push Docker image
      run :  docker push abdulsamadkhan2/docker-dashboard:latest
