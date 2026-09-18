@@ -25,4 +25,4 @@ jobs:
 
 
    - name : Push docker image
-     run :  docker push abdulsamadkhan2/docker_dashboard:latest
+     run :  docker push abdulsamadkhan2/docker-dashboard:latest
